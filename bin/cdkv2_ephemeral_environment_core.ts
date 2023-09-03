@@ -2,9 +2,25 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { Cdkv2EphemeralEnvironmentCoreStack } from '../lib/cdkv2_ephemeral_environment_core-stack';
+import input from "../environment-properties.json";
+import { AwsSolutionsChecks,NagSuppressions } from 'cdk-nag'
+// Use environment variables when needed.
+import {env} from "process";
+
+
+
+
+const deploymentEnv = {
+  account: '571340586587', //env.CDK_DEFAULT_ACCOUNT,
+  region: 'us-east-2'//env.CDK_DEFAULT_REGION,
+};
+const stackName = input.environment.name;
 
 const app = new cdk.App();
-new Cdkv2EphemeralEnvironmentCoreStack(app, 'Cdkv2EphemeralEnvironmentCoreStack', {
+
+const stack = new Cdkv2EphemeralEnvironmentCoreStack(app, 'Cdkv2EphemeralEnvironmentCoreStack', {
+  env: deploymentEnv,
+  stackName: stackName,
   /* If you don't specify 'env', this stack will be environment-agnostic.
    * Account/Region-dependent features and context lookups will not work,
    * but a single synthesized template can be deployed anywhere. */
@@ -19,3 +35,13 @@ new Cdkv2EphemeralEnvironmentCoreStack(app, 'Cdkv2EphemeralEnvironmentCoreStack'
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
+// Add the cdk-nag AwsSolutions Pack with extra verbose logging enabled.
+/*cdk.Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }))
+
+NagSuppressions.addResourceSuppressions(stack, [
+  {
+    id: 'AwsSolutions-ELB2',
+    reason: 'Demonstrate a resource level suppression.'
+  },
+]);
+*/
