@@ -22,4 +22,5 @@ stages:
     Project: ephemeral_env_core
     Language: typescript
     Action: diff
+    ServiceConnection: EphemeralEnvDeployment
     
