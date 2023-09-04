@@ -10,6 +10,7 @@ import { AlbStack } from "./cdkv2_ephemeral_environment_alb-stack";
 
 
 export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
+  public readonly natGatewayProvider =  ec2.NatProvider.gateway();
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
     super(scope, id, props);
 
@@ -20,23 +21,18 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
     const envName =  input.environment.inputs.env ?? "dev" ;
 
      // Configure the `natGatewayProvider` when defining a Vpc
-     const natGatewayProvider = ec2.NatProvider.gateway();
+     //const natGatewayProvider = ec2.NatProvider.gateway();
      if (environmentInputs.nat_provider === "instance") {
-     const natGatewayProvider = ec2.NatProvider.instance({
+      this.natGatewayProvider = ec2.NatProvider.instance({
       instanceType: new ec2.InstanceType('t3.nano'),
       });
       
     }
-    else if (environmentInputs.nat_provider === "manage") {
-      const natGatewayProvider = ec2.NatProvider.gateway();
-  }
-
-
-    
+ 
 
     const vpc = new ec2.Vpc(this, "EnvVPC", {
-      vpcName: stackName,
-      natGatewayProvider: natGatewayProvider,
+      vpcName: `${envName}-stackName`,
+      natGatewayProvider: this.natGatewayProvider,
       natGateways: environmentInputs.nat_gateways,
       ipAddresses: ec2.IpAddresses.cidr(environmentInputs.vpc_cidr_block),
       
@@ -51,6 +47,7 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
     
 
     const sharedSvcSecGrp = new ec2.SecurityGroup(this, "SharedSecurityGroup", {
+
       vpc: vpc,
       allowAllOutbound: true,
     });
@@ -69,7 +66,7 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
       vpc: vpc,
       enableFargateCapacityProviders: true,
       containerInsights: environmentInputs.enhanced_cluster_monitoring,
-      clusterName: stackName,
+      clusterName: `${envName}-stackName`,
           defaultCloudMapNamespace: {
         name: environmentInputs.service_discovery_namespace,
 
@@ -145,12 +142,12 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
     }
 
     if (environmentInputs.load_balanced) {
-      const alb = new AlbStack(this, "LB", {
+        new AlbStack(this, "LB", {
         //containerPort: environmentInputs.port,
         //listenerPort: 80,
         public: environmentInputs.load_balanced_public,
         vpc: vpc,
-        stackName: stackName,
+        stackName: `${envName}-stackName`,
       });
     }
     // put value for lookups import

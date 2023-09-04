@@ -9,8 +9,8 @@ import {env} from "process";
 
 
 const deploymentEnv = {
-  account: env.CDK_DEPLOY_ACCOUNT ||env.CDK_DEFAULT_ACCOUNT,  //'571340586587',
-  region: env.CDK_DEPLOY_REGION || env.CDK_DEFAULT_REGION, //'us-east-2'
+  account: env.CDK_DEPLOY_ACCOUNT ?? env.CDK_DEFAULT_ACCOUNT,  //'571340586587',
+  region: env.CDK_DEPLOY_REGION ?? env.CDK_DEFAULT_REGION, //'us-east-2'
 };
 
 const stackName = input.environment.name;
