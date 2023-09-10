@@ -31,7 +31,7 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
  
 
     const vpc = new ec2.Vpc(this, "EnvVPC", {
-      vpcName: `${envName}-stackName`,
+      vpcName: `${envName}-${stackName}`,
       natGatewayProvider: this.natGatewayProvider,
       natGateways: environmentInputs.nat_gateways,
       ipAddresses: ec2.IpAddresses.cidr(environmentInputs.vpc_cidr_block),
@@ -66,7 +66,7 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
       vpc: vpc,
       enableFargateCapacityProviders: true,
       containerInsights: environmentInputs.enhanced_cluster_monitoring,
-      clusterName: `${envName}-stackName`,
+      clusterName: `${envName}-${stackName}`,
           defaultCloudMapNamespace: {
         name: environmentInputs.service_discovery_namespace,
 
@@ -147,7 +147,7 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
         //listenerPort: 80,
         public: environmentInputs.load_balanced_public,
         vpc: vpc,
-        stackName: `${envName}-stackName`,
+        stackName: `${envName}-${stackName}`,
       });
     }
     // put value for lookups import
