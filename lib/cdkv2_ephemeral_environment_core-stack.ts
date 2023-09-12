@@ -17,9 +17,9 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
     // The code that defines your stack goes here
 
     const environmentInputs = input.environment.inputs;
-    const stackName = props.stackName ?? input.environment.name ;
     const envName =  input.environment.inputs.env ?? "dev" ;
-
+    const stackName =  `${envName}-${props.stackName}` ?? input.environment.name ;
+    
      // Configure the `natGatewayProvider` when defining a Vpc
      //const natGatewayProvider = ec2.NatProvider.gateway();
      if (environmentInputs.nat_provider === "instance") {
@@ -31,7 +31,7 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
  
 
     const vpc = new ec2.Vpc(this, "EnvVPC", {
-      vpcName: `${envName}-${stackName}`,
+      vpcName: stackName,
       natGatewayProvider: this.natGatewayProvider,
       natGateways: environmentInputs.nat_gateways,
       ipAddresses: ec2.IpAddresses.cidr(environmentInputs.vpc_cidr_block),
@@ -66,7 +66,7 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
       vpc: vpc,
       enableFargateCapacityProviders: true,
       containerInsights: environmentInputs.enhanced_cluster_monitoring,
-      clusterName: `${envName}-${stackName}`,
+      clusterName: stackName,
           defaultCloudMapNamespace: {
         name: environmentInputs.service_discovery_namespace,
 
@@ -147,7 +147,7 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
         //listenerPort: 80,
         public: environmentInputs.load_balanced_public,
         vpc: vpc,
-        stackName: `${envName}-${stackName}`,
+        stackName: stackName,
       });
     }
     // put value for lookups import
