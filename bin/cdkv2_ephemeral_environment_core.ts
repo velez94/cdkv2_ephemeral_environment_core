@@ -9,7 +9,7 @@ import {env} from "process";
 
 
 const deploymentEnv = {
-  account: env.CDK_DEPLOY_ACCOUNT ?? env.CDK_DEFAULT_ACCOUNT,  //'571340586587',
+  account: env.CDK_DEPLOY_ACCOUNT ?? env.CDK_DEFAULT_ACCOUNT,  //'123456789102',
   region: env.CDK_DEPLOY_REGION ?? env.CDK_DEFAULT_REGION, //'us-east-2'
 };
 
@@ -23,7 +23,7 @@ const stack = new Cdkv2EphemeralEnvironmentCoreStack(app, 'Cdkv2EphemeralEnviron
  
 });
 // Add the cdk-nag AwsSolutions Pack with extra verbose logging enabled.
-/*cdk.Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }))
+cdk.Aspects.of(app).add(new AwsSolutionsChecks({ verbose: true }))
 
 NagSuppressions.addResourceSuppressions(stack, [
   {
@@ -31,4 +31,4 @@ NagSuppressions.addResourceSuppressions(stack, [
     reason: 'Demonstrate a resource level suppression.'
   },
 ]);
-*/
+//*/
