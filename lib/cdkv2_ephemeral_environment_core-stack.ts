@@ -6,7 +6,7 @@ import * as autoscaling from "aws-cdk-lib/aws-autoscaling";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as ssm from "aws-cdk-lib/aws-ssm";
 import input from "../environment-properties.json";
-import { AlbStack } from "./cdkv2_ephemeral_environment_alb-stack";
+import { AlbStack } from "./cdkv2_ephemeral_environment_alb_construct";
 
 
 export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
