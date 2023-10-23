@@ -7,7 +7,7 @@ import * as iam from "aws-cdk-lib/aws-iam";
 import * as ssm from "aws-cdk-lib/aws-ssm";
 import input from "../environment-properties.json";
 import { AlbStack } from "./cdkv2_ephemeral_environment_alb_construct";
-
+import { NagSuppressions } from 'cdk-nag';
 
 export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
   public readonly natGatewayProvider =  ec2.NatProvider.gateway();
@@ -195,5 +195,29 @@ export class Cdkv2EphemeralEnvironmentCoreStack extends cdk.Stack {
       value: nId,
       exportName: `CloudMapNamespaceId-${stackName}`,
     });
+
+   // add supression by path 
+    NagSuppressions.addResourceSuppressionsByPath(this, '/Cdkv2EphemeralEnvironmentCoreStack/EnvVPC/PublicSubnet1/NatInstance/Resource', [
+      
+      {
+        id: 'AwsSolutions-EC26',
+        reason: 'The resource creates one or more EBS volumes that have encryption disabled. Suppression.'
+      },
+      {
+        id: 'AwsSolutions-EC28',
+        reason: 'The EC2 instance/AutoScaling launch configuration does not have detailed monitoring enabled. Suppression.'
+      },
+      {
+        id: 'AwsSolutions-EC29',
+        reason: 'The EC2 instance is not part of an ASG and has Termination Protection disabled. Suppression.'
+      }
+    ]);
+  
+    NagSuppressions.addResourceSuppressionsByPath(this, '/Cdkv2EphemeralEnvironmentCoreStack/EnvVPC/NatSecurityGroup/Resource', [
+      {
+        id: 'AwsSolutions-EC23',
+        reason: ' The Security Group allows for 0.0.0.0/0 or ::/0 inbound access.. Suppression.'
+      },
+    ]);
   }
 }
