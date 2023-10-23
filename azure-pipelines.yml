@@ -9,7 +9,7 @@ resources:
       type: git
       name: DevSecOps/cdk_pipelines
 trigger:
-- master
+- main
 
 pool:
   vmImage: ubuntu-latest
@@ -21,6 +21,6 @@ stages:
   parameters:
     Project: ephemeral_env_core
     Language: typescript
-    Action: deploy
+    Action: destroy
     ServiceConnection: EphemeralEnvDeployment
     
