@@ -21,6 +21,6 @@ stages:
   parameters:
     Project: ephemeral_env_core
     Language: typescript
-    Action: deploy
+    Action: destroy
     ServiceConnection: EphemeralEnvDeployment
     
